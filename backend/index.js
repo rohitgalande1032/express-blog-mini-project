@@ -1,35 +1,36 @@
 import express from 'express';
 import cors from "cors";
+import { v4 as uuidv4 } from 'uuid';
 
 const app = express();
 
-const blogs = [
+let blogs = [
     {
-      id: 1,
+      id: uuidv4(),
       title: "The Future of Web Development",
       author: "John Doe",
       content: "Web development is constantly evolving with new technologies like WebAssembly, AI-powered design, and the rise of serverless architecture.",
     },
     {
-      id: 2,
+      id: uuidv4(),
       title: "Understanding React Hooks",
       author: "Jane Smith",
       content: "React Hooks introduced a revolutionary way to handle state and side effects in functional components without needing class components.",
     },
     {
-      id: 3,
+      id: uuidv4(),
       title: "A Guide to Node.js Performance Optimization",
       author: "Robert Brown",
       content: "Optimizing Node.js applications involves techniques like caching, clustering, and using async operations effectively.",
     },
     {
-      id: 4,
+      id: uuidv4(),
       title: "Why TypeScript is the Future of JavaScript",
       author: "Emily White",
       content: "TypeScript adds static typing to JavaScript, reducing bugs and making large-scale application development easier.",
     },
     {
-      id: 5,
+      id: uuidv4(),
       title: "Exploring AI in Web Applications",
       author: "Michael Johnson",
       content: "AI is transforming web applications with features like chatbots, recommendation systems, and personalized content.",
@@ -56,8 +57,20 @@ app.get("/blogs", (req, res) => {
 
 app.post("/newblog", (req, res) => {
   console.log(req.body)
-  blogs.push(req.body)
-  res.status(200).send("Blog added!!!")
+  blogs.push({...req.body, id: uuidv4()})
+  res.status(200).json({msg: "Blog created successfully"})
+})
+
+app.delete("/delete/:id", (req, res) => {
+  console.log(req.params.id)
+  
+  const filteredBlogs = blogs.filter((item) => {
+    return item.id != req.params.id
+  })
+
+  console.log(filteredBlogs)
+  blogs = filteredBlogs
+  res.status(200).json(filteredBlogs)
 })
 
 app.listen(8080, () => {
