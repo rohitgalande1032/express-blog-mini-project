@@ -38,6 +38,9 @@ const blogs = [
 
   // Use CORS middleware
 app.use(cors());
+// Use JSON middleware
+app.use(express.json());
+
 
 // OR, if you want to allow only your frontend:
 // app.use(cors({ origin: "http://localhost:5173" }));
@@ -49,6 +52,12 @@ app.get("/", (req, res) => {
 
 app.get("/blogs", (req, res) => {
     res.json(blogs);
+})
+
+app.post("/newblog", (req, res) => {
+  console.log(req.body)
+  blogs.push(req.body)
+  res.status(200).send("Blog added!!!")
 })
 
 app.listen(8080, () => {
