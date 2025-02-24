@@ -73,6 +73,25 @@ app.delete("/delete/:id", (req, res) => {
   res.status(200).json(filteredBlogs)
 })
 
+app.get("/edit/:id", (req, res) => {
+  console.log(req.params.id)
+  const foundBlog = blogs.find((item) => item.id == req.params.id)
+  res.json(foundBlog)
+})
+
+app.post("/edit/:id", (req, res) => {
+  const id = req.params.id
+  const {author, title, content} = req.body
+
+  const foundBlog = blogs.find((item) => item.id == id)
+  
+  foundBlog.author = author
+  foundBlog.title = title
+  foundBlog.content = content
+
+  res.status(200).json({msg: "Blog updated successfully"})
+})
+
 app.listen(8080, () => {
     console.log('Server is running on port 8080');
 })
